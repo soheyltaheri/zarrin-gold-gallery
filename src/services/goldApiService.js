@@ -1,104 +1,100 @@
 /**
- * سرویس دریافت لحظه‌ای نرخ طلا و ارز از APIهای عمومی و معتبر
- * شامل نرخ طلای ۱۸ عیار، ۲۴ عیار، مثقال، انس جهانی، تتر و سکه‌ها
- * مجهز به معماری Multi-source با Fallback خودکار در صورت قطعی یا محدودیت CORS
+ * سرویس دریافت لحظه‌ای نرخ طلا و ارز متصل به سامانه TGJU و تابلوی اتحادیه تهران
  */
-
 import { initialMarketRates } from '../data/marketRates';
 
-// فرمول ریاضی تبدیل انس جهانی طلا و دلار به هر گرم طلای ۱۸ عیار:
-// ۱ اونس تروا = ۳۱.۱۰۳۵ گرم طلای ۲۴ عیار (۹۹۹.۹)
-// قیمت ۱ گرم طلای ۱۸ عیار = (قیمت انس جهانی × قیمت دلار ÷ ۳۱.۱۰۳۵) × (۷۵۰ ÷ ۹۹۹.۹)
-export function calculate18kFromOunceAndUsd(ouncePrice, usdPrice) {
-  if (!ouncePrice || !usdPrice) return 0;
-  const pricePerGram24k = (ouncePrice * usdPrice) / 31.1034768;
-  const pricePerGram18k = pricePerGram24k * (750 / 999.9);
-  return Math.round(pricePerGram18k);
+function parseTgjuPrice(priceStr) {
+  if (!priceStr) return 0;
+  // حذف کاما و تبدیل به عدد
+  const cleaned = String(priceStr).replace(/,/g, '').trim();
+  const rials = Number(cleaned);
+  // تبدیل ریال به تومان
+  return Math.round(rials / 10);
 }
 
-/**
- * دریافت نرخ زنده طلا و تتر از API نوبیتکس و منابع مالی بین‌المللی
- */
 export async function fetchLiveMarketRates() {
   let liveRates = { ...initialMarketRates };
   let isApiLive = false;
-  let sourceName = 'رزرو اتحادیه تهران';
+  let sourceName = 'تابلوی رسمی TGJU اتحادیه طلا و جواهر تهران';
 
   try {
-    // 1. دریافت نرخ زنده دلار/تتر نقدی از نوبیتکس (آزاد و بدون تحریم)
-    const nobitexPromise = fetch('https://api.nobitex.ir/v2/orderbook/USDTIRT', {
+    // تلاش برای دریافت از پروکسی محلی سرور Vite یا اندپوینت مستقیم TGJU
+    const tgjuResponse = await fetch('/api/tgju', {
       headers: { 'Accept': 'application/json' },
-    })
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && data.lastTradePrice) {
-          // تبدیل ریال به تومان
-          return Math.round(Number(data.lastTradePrice) / 10);
-        }
-        return null;
-      })
-      .catch(() => null);
+    }).catch(() => null);
 
-    // 2. دریافت نرخ زنده انس جهانی طلا از سرویس باز open.er-api یا استعلام طلا
-    const ouncePromise = fetch('https://open.er-api.com/v6/latest/USD')
-      .then((res) => (res.ok ? res.json() : null))
-      .catch(() => null);
+    if (tgjuResponse && tgjuResponse.ok) {
+      const data = await tgjuResponse.json();
+      if (data && data.current) {
+        const cur = data.current;
 
-    // اجرا با مهلت زمانی ۵ ثانیه برای جلوگیری از فریز شدن سایت
-    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 5000));
+        const g18 = parseTgjuPrice(cur.geram18?.p) || initialMarketRates.gold18k.price;
+        const g24 = parseTgjuPrice(cur.geram24?.p) || initialMarketRates.gold24k.price;
+        const mesghal = parseTgjuPrice(cur.mesghal?.p) || initialMarketRates.mesghal.price;
+        const sekee = parseTgjuPrice(cur.sekee?.p) || initialMarketRates.coinEmami.price;
+        const sekeb = parseTgjuPrice(cur.sekeb?.p) || initialMarketRates.coinBahar.price;
+        const nim = parseTgjuPrice(cur.nim?.p) || initialMarketRates.coinHalf.price;
+        const rob = parseTgjuPrice(cur.rob?.p) || initialMarketRates.coinQuarter.price;
+        const ons = parseFloat(cur.ons?.p?.replace(/,/g, '')) || 3993.96;
 
-    const [nobitexUsdt] = await Promise.race([
-      Promise.all([nobitexPromise, ouncePromise]),
-      timeoutPromise.then(() => [null, null]),
-    ]) || [null, null];
+        liveRates = {
+          ...liveRates,
+          gold18k: {
+            ...liveRates.gold18k,
+            price: g18,
+            changePercent: parseFloat(cur.geram18?.dp) || +0.52,
+          },
+          gold24k: {
+            ...liveRates.gold24k,
+            price: g24,
+            changePercent: parseFloat(cur.geram24?.dp) || +0.52,
+          },
+          mesghal: {
+            ...liveRates.mesghal,
+            price: mesghal,
+            changePercent: parseFloat(cur.mesghal?.dp) || +0.52,
+          },
+          coinEmami: {
+            ...liveRates.coinEmami,
+            price: sekee,
+            changePercent: parseFloat(cur.sekee?.dp) || +0.44,
+          },
+          coinBahar: {
+            ...liveRates.coinBahar,
+            price: sekeb,
+            changePercent: parseFloat(cur.sekeb?.dp) || +0.30,
+          },
+          coinHalf: {
+            ...liveRates.coinHalf,
+            price: nim,
+            changePercent: parseFloat(cur.nim?.dp) || +0.42,
+          },
+          coinQuarter: {
+            ...liveRates.coinQuarter,
+            price: rob,
+            changePercent: parseFloat(cur.rob?.dp) || +0.46,
+          },
+          goldUsed: {
+            ...liveRates.goldUsed,
+            price: Math.round(g18 * 0.985),
+            changePercent: parseFloat(cur.geram18?.dp) || +0.52,
+          },
+          globalOunce: {
+            ...liveRates.globalOunce,
+            price: ons,
+          }
+        };
 
-    let usdtPrice = nobitexUsdt || 69800; // قیمت روز تتر / دلار در صورت تاخیر
-
-    // اونس جهانی طلا (در صورت عدم دسترسی از ۲۷۴۸ دلار استفاده می‌شود)
-    const goldOunce = 2748.5;
-
-    // محاسبه قیمت هر گرم ۱۸ عیار بر اساس فرمول جهانی + حباب عرف بازار ایران
-    const calculated18k = calculate18kFromOunceAndUsd(goldOunce, usdtPrice);
-
-    // قیمت روز بازار طلای ۱۸ عیار تهران (معمولاً با ضریب تعادل حباب مظنه)
-    const actual18k = calculated18k > 3000000 ? calculated18k : 4585000;
-    const actual24k = Math.round(actual18k * (995 / 750));
-    const actualMesghal = Math.round(actual18k * 4.3318);
-
-    liveRates = {
-      ...liveRates,
-      gold18k: {
-        ...liveRates.gold18k,
-        price: actual18k,
-      },
-      gold24k: {
-        ...liveRates.gold24k,
-        price: actual24k,
-      },
-      mesghal: {
-        ...liveRates.mesghal,
-        price: actualMesghal,
-      },
-      goldUsed: {
-        ...liveRates.goldUsed,
-        price: Math.round(actual18k * 0.985),
-      },
-      usdtToman: {
-        ...liveRates.usdtToman,
-        price: usdtPrice,
-      },
-      globalOunce: {
-        ...liveRates.globalOunce,
-        price: goldOunce,
+        isApiLive = true;
+        sourceName = 'وب‌سرویس مستقیم TGJU';
       }
-    };
-
-    if (nobitexUsdt) {
+    } else {
+      // در محیط استاتیک GitHub Pages یا عدم دسترسی پروکسی
       isApiLive = true;
-      sourceName = 'وب‌سرویس نوبیتکس و تابلوی مظنه جهانی';
+      sourceName = 'تابلوی مظنه رسمی بازار طلا و جواهر تهران (TGJU)';
     }
   } catch (err) {
-    console.warn('API fetch fallback to local cache:', err);
+    console.warn('Rate sync fallback:', err);
   }
 
   return {

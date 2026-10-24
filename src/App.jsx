@@ -13,6 +13,7 @@ import CustomDesignModal from './components/CustomDesignModal';
 import VerifyInvoiceModal from './components/VerifyInvoiceModal';
 import WishlistModal from './components/WishlistModal';
 import CheckoutSuccessModal from './components/CheckoutSuccessModal';
+import RateEditorModal from './components/RateEditorModal';
 import TrustBadges from './components/TrustBadges';
 import Footer from './components/Footer';
 
@@ -122,9 +123,22 @@ export default function App() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isOfficialInvoiceOpen, setIsOfficialInvoiceOpen] = useState(false);
   const [isCheckoutSuccessOpen, setIsCheckoutSuccessOpen] = useState(false);
+  const [isRateEditorOpen, setIsRateEditorOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [sizeGuideType, setSizeGuideType] = useState('ring');
   const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+
+  // Manual gold rate override handler
+  const handleUpdateGoldPrice = (newPrice) => {
+    setRates((prev) => ({
+      ...prev,
+      gold18k: { ...prev.gold18k, price: newPrice },
+      gold24k: { ...prev.gold24k, price: Math.round(newPrice * (995 / 750)) },
+      mesghal: { ...prev.mesghal, price: Math.round(newPrice * 4.3318) },
+      goldUsed: { ...prev.goldUsed, price: Math.round(newPrice * 0.985) },
+    }));
+    setRatesLastUpdated('سفارشی دستی');
+  };
 
   // Cart operations
   const handleAddToCart = (productWithDetails) => {
@@ -179,6 +193,7 @@ export default function App() {
         rates={rates}
         onOpenRatesModal={() => setIsRatesChartOpen(true)}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
+        onOpenRateEditor={() => setIsRateEditorOpen(true)}
       />
 
       {/* Luxury Header with multi-tab navigation */}
@@ -369,6 +384,16 @@ export default function App() {
         onClose={() => setIsCheckoutSuccessOpen(false)}
         totalAmount={cartTotal}
         onOpenInvoice={() => setIsOfficialInvoiceOpen(true)}
+      />
+
+      {/* 11. Quick Gold Rate Override Modal */}
+      <RateEditorModal
+        isOpen={isRateEditorOpen}
+        onClose={() => setIsRateEditorOpen(false)}
+        currentGoldPrice={currentGoldPrice}
+        onUpdateGoldPrice={handleUpdateGoldPrice}
+        onResetToLive={loadLiveRates}
+        tgjuLivePrice={27223000}
       />
 
     </div>

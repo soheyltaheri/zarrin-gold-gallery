@@ -16,26 +16,43 @@ import {
 import { formatToman } from '../utils/goldCalculator';
 
 export default function MarketAnalysisPage({ rates }) {
-  const [selectedAsset, setSelectedAsset] = useState('gold18k');
+  const gold18kPrice = rates.gold18k.price;
 
-  // Coin bubble analysis
+  // محاسبه دقیق ارزش ذاتی سکه بر اساس وزن طلای ۲۲ عیار (۹۰۰) معادل ۱۸ عیار (۷۵۰):
+  // هر گرم ۲۲ عیار = (۹۰۰ / ۷۵۰) = ۱.۲ برابر ۱ گرم ۱۸ عیار
+  const emamiIntrinsic = Math.round(8.133 * 1.2 * gold18kPrice);
+  const halfIntrinsic = Math.round(4.066 * 1.2 * gold18kPrice);
+  const quarterIntrinsic = Math.round(2.033 * 1.2 * gold18kPrice);
+  const mesghalIntrinsic = Math.round(4.3318 * gold18kPrice);
+
+  const emamiBubble = Math.max(0, rates.coinEmami.price - emamiIntrinsic);
+  const baharBubble = Math.max(0, rates.coinBahar.price - emamiIntrinsic);
+  const halfBubble = Math.max(0, rates.coinHalf.price - halfIntrinsic);
+  const quarterBubble = Math.max(0, rates.coinQuarter.price - quarterIntrinsic);
+
+  const emamiBubblePct = ((emamiBubble / emamiIntrinsic) * 100).toFixed(1);
+  const baharBubblePct = ((baharBubble / emamiIntrinsic) * 100).toFixed(1);
+  const halfBubblePct = ((halfBubble / halfIntrinsic) * 100).toFixed(1);
+  const quarterBubblePct = ((quarterBubble / quarterIntrinsic) * 100).toFixed(1);
+
+  // Coin bubble dynamic analysis
   const coinsBubble = [
     {
       name: 'سکه تمام طرح جدید (امامی)',
       price: rates.coinEmami.price,
-      intrinsicValue: 43500000,
-      bubble: rates.coinEmami.bubble || 9400000,
-      bubblePercent: 17.7,
-      riskLevel: 'متوسط به بالا',
+      intrinsicValue: emamiIntrinsic,
+      bubble: emamiBubble,
+      bubblePercent: emamiBubblePct,
+      riskLevel: 'متوسط',
       riskColor: 'text-amber-400 bg-amber-950/30 border-amber-800/40',
       purity: '۸.۱۳۳ گرم طلای ۲۲ عیار (۹۰۰)',
     },
     {
       name: 'سکه بهار آزادی (طرح قدیم)',
       price: rates.coinBahar.price,
-      intrinsicValue: 43500000,
-      bubble: rates.coinBahar.bubble || 4800000,
-      bubblePercent: 9.9,
+      intrinsicValue: emamiIntrinsic,
+      bubble: baharBubble,
+      bubblePercent: baharBubblePct,
       riskLevel: 'کم‌ریسک‌تر از امامی',
       riskColor: 'text-emerald-400 bg-emerald-950/30 border-emerald-800/40',
       purity: '۸.۱۳۳ گرم طلای ۲۲ عیار (۹۰۰)',
@@ -43,9 +60,9 @@ export default function MarketAnalysisPage({ rates }) {
     {
       name: 'نیم سکه بهار آزادی',
       price: rates.coinHalf.price,
-      intrinsicValue: 21750000,
-      bubble: rates.coinHalf.bubble || 6650000,
-      bubblePercent: 23.4,
+      intrinsicValue: halfIntrinsic,
+      bubble: halfBubble,
+      bubblePercent: halfBubblePct,
       riskLevel: 'حباب بالا',
       riskColor: 'text-rose-400 bg-rose-950/30 border-rose-800/40',
       purity: '۴.۰۶۶ گرم طلای ۲۲ عیار (۹۰۰)',
@@ -53,17 +70,17 @@ export default function MarketAnalysisPage({ rates }) {
     {
       name: 'ربع سکه بهار آزادی',
       price: rates.coinQuarter.price,
-      intrinsicValue: 10875000,
-      bubble: rates.coinQuarter.bubble || 7325000,
-      bubblePercent: 40.2,
+      intrinsicValue: quarterIntrinsic,
+      bubble: quarterBubble,
+      bubblePercent: quarterBubblePct,
       riskLevel: 'بسیار پرریسک (بیشترین حباب)',
       riskColor: 'text-rose-500 bg-rose-950/40 border-rose-800/50',
       purity: '۲.۰۳۳ گرم طلای ۲۲ عیار (۹۰۰)',
     },
     {
-      name: 'طلای آب‌شده (انگ‌دار)',
-      price: rates.gold18k.price * 4.3318,
-      intrinsicValue: rates.gold18k.price * 4.3318,
+      name: 'طلای آب‌شده (مظنه بازار تهران)',
+      price: rates.mesghal.price,
+      intrinsicValue: mesghalIntrinsic,
       bubble: 0,
       bubblePercent: 0.0,
       riskLevel: 'صفر حباب (ایمن‌ترین پس‌انداز)',
@@ -97,7 +114,7 @@ export default function MarketAnalysisPage({ rates }) {
             <span className="text-2xl font-black text-white">{formatToman(rates.gold18k.price)}</span>
             <span className="text-xs text-emerald-400 font-bold">+{rates.gold18k.changePercent}٪</span>
           </div>
-          <span className="text-[11px] text-zinc-500 block">سطح حمایتی کلیدی: ۴,۴۵۰,۰۰۰ تومان</span>
+          <span className="text-[11px] text-zinc-500 block">سطح حمایتی کلیدی: ۲۶,۸۰۰,۰۰۰ تومان</span>
         </div>
 
         <div className="bg-[#111319] border border-zinc-800 rounded-2xl p-5 space-y-2">
@@ -110,19 +127,19 @@ export default function MarketAnalysisPage({ rates }) {
         </div>
 
         <div className="bg-[#111319] border border-zinc-800 rounded-2xl p-5 space-y-2">
-          <span className="text-xs text-zinc-400 block font-medium">دلار آزاد / تتر</span>
+          <span className="text-xs text-zinc-400 block font-medium">مثقال طلا (مظنه تهران)</span>
           <div className="flex items-baseline justify-between" dir="ltr">
-            <span className="text-2xl font-black text-white">{formatToman(rates.usdtToman.price)}</span>
-            <span className="text-xs text-emerald-400 font-bold">+{rates.usdtToman.changePercent}٪</span>
+            <span className="text-2xl font-black text-white">{formatToman(rates.mesghal.price)}</span>
+            <span className="text-xs text-emerald-400 font-bold">+{rates.mesghal.changePercent}٪</span>
           </div>
-          <span className="text-[11px] text-zinc-500 block">محرک اصلی رشد نرخ طلای داخلی</span>
+          <span className="text-[11px] text-zinc-500 block">مبنای معاملات بنکداران بازار</span>
         </div>
 
         <div className="bg-[#111319] border border-zinc-800 rounded-2xl p-5 space-y-2">
-          <span className="text-xs text-zinc-400 block font-medium">شاخص حباب سکه امامی</span>
+          <span className="text-xs text-zinc-400 block font-medium">سکه تمام طرح جدید (امامی)</span>
           <div className="flex items-baseline justify-between" dir="ltr">
-            <span className="text-2xl font-black text-amber-400">۱۷.۷٪</span>
-            <span className="text-xs text-zinc-400 font-mono">~ ۹.۴ میلیون ت</span>
+            <span className="text-2xl font-black text-amber-400">{formatToman(rates.coinEmami.price)}</span>
+            <span className="text-xs text-zinc-400 font-mono">حباب: {emamiBubblePct}٪</span>
           </div>
           <span className="text-[11px] text-zinc-500 block">توصیه: ترجیح خرید آب‌شده بر سکه</span>
         </div>
@@ -134,14 +151,14 @@ export default function MarketAnalysisPage({ rates }) {
           <div>
             <h3 className="text-lg font-bold text-white flex items-center gap-2">
               <Flame className="w-5 h-5 text-amber-400" />
-              <span>جدول مقایسه ارزش ذاتی و حباب انواع سکه و طلای آب‌شده</span>
+              <span>جدول محاسبه دقیق ارزش ذاتی و حباب انواع سکه و طلای آب‌شده</span>
             </h3>
             <p className="text-xs text-zinc-400 mt-0.5">
-              فرمول حباب: تفاوت قیمت معامله در بازار با ارزش طلای ۲۲ عیار به کار رفته در سکه
+              فرمول اتحادیه: ارزش ذاتی = وزن خالص × عیار ۲۲ به ۱۸ (ضریب ۱.۲) × نرخ روز ۱۸ عیار
             </p>
           </div>
           <div className="text-xs bg-[#181B22] border border-zinc-700 px-3 py-1.5 rounded-xl text-zinc-300">
-            بروزرسانی زنده بر اساس مظنه سبزه میدان
+            محاسبه خودکار و همگام با نرخ لحظه‌ای ۱۸ عیار
           </div>
         </div>
 
@@ -152,8 +169,8 @@ export default function MarketAnalysisPage({ rates }) {
                 <th className="p-3 font-bold">نوع مسکوک یا طلا</th>
                 <th className="p-3 font-bold">عیار و وزن خالص</th>
                 <th className="p-3 font-bold">قیمت روز بازار (تومان)</th>
-                <th className="p-3 font-bold">ارزش ذاتی طلا</th>
-                <th className="p-3 font-bold">مبلغ حباب</th>
+                <th className="p-3 font-bold">ارزش ذاتی طلای خام</th>
+                <th className="p-3 font-bold">مبلغ حباب (تومان)</th>
                 <th className="p-3 font-bold">درصد حباب</th>
                 <th className="p-3 font-bold text-center">ریسک سرمایه‌گذاری</th>
               </tr>
@@ -187,23 +204,23 @@ export default function MarketAnalysisPage({ rates }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-zinc-300 leading-relaxed font-light">
           <div className="bg-[#0B0C0E]/70 p-4 rounded-2xl border border-zinc-800 space-y-2">
-            <h4 className="font-bold text-white text-xs">۱. چرا ربع‌سکه ریسک بالایی دارد؟</h4>
+            <h4 className="font-bold text-white text-xs">۱. چرا ربع‌سکه بیشترین حباب را دارد؟</h4>
             <p>
-              به علت توان خرید محدود عموم جامعه، تقاضا برای ربع‌سکه بالا رفته و حباب آن تا بالای ۴۰ درصد رشد کرده است. یعنی شما ۴۰ درصد از پول خود را برای هوای خالی پرداخت می‌کنید نه طلا!
+              به علت نقدینگی کمتر مورد نیاز برای خرید ربع‌سکه، تقاضای هیجانی آن در بازار بیشتر است و حباب آن اغلب بین ۲۰٪ تا ۴۰٪ نوسان می‌کند. در افت‌های بازار، حباب زودتر از قیمت طلا تخلیه می‌شود.
             </p>
           </div>
 
           <div className="bg-[#0B0C0E]/70 p-4 rounded-2xl border border-zinc-800 space-y-2">
             <h4 className="font-bold text-emerald-400 text-xs">۲. مزیت استراتژیک طلای آب‌شده</h4>
             <p>
-              طلای آب‌شده دقیقاً بر مبنای عیارسنجی ری‌گیری و بدون حتی یک ریال حباب یا اجرت معامله می‌شود. سرمایه‌گذاران حرفه‌ای برای حفظ سرمایه صرفاً به سمت آب‌شده یا شمش‌های ۲۴ عیار می‌روند.
+              طلای آب‌شده دقیقاً بر مبنای عیارسنجی ری‌گیری و بدون حتی یک ریال حباب یا اجرت معامله می‌شود. سرمایه‌گذاران حرفه‌ای برای حفظ ارزش ریال صرفاً به سمت آب‌شده یا شمش‌های ۲۴ عیار می‌روند.
             </p>
           </div>
 
           <div className="bg-[#0B0C0E]/70 p-4 rounded-2xl border border-zinc-800 space-y-2">
-            <h4 className="font-bold text-[#F5D77F] text-xs">۳. پیش‌بینی روند طلا در ماه‌های آتی</h4>
+            <h4 className="font-bold text-[#F5D77F] text-xs">۳. راهنمای خرید مصنوعات طلا</h4>
             <p>
-              با توجه به تثبیت انس جهانی در محدوده ۲۷۰۰ دلار و چسبندگی نرخ ارز آزاد، کف قیمتی طلای ۱۸ عیار حمایت مستحکمی نشان داده و استراتژی خرید پله‌ای در روزهای منفی بازار پیشنهاد می‌گردد.
+              اگر هدف شما استفاده زینتی همراه با حفظ ارزش است، کارهای تراش‌خورده کم‌اجرت (زیر ۹ درصد) و بدون نگین را انتخاب کنید تا هنگام تعویض یا فروش، حداکثر بازگشت سرمایه را داشته باشید.
             </p>
           </div>
         </div>
