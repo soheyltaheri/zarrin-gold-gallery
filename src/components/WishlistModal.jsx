@@ -62,6 +62,10 @@ export default function WishlistModal({
                     <img
                       src={p.images[0]}
                       alt={p.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80';
+                      }}
                       className="w-16 h-16 rounded-lg object-cover bg-zinc-900 border border-zinc-800 shrink-0"
                     />
                     <div className="space-y-1 text-right">

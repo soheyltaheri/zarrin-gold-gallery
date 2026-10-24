@@ -102,6 +102,10 @@ export default function ProductDetailModal({
               <img
                 src={product.images[activeImageIdx] || product.images[0]}
                 alt={product.name}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80';
+                }}
                 className="w-full h-full object-cover object-center"
               />
               <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] text-[#F5D77F] border border-[#D4AF37]/30 font-medium">
@@ -122,7 +126,15 @@ export default function ProductDetailModal({
                         : 'border-zinc-800 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt=""
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80';
+                      }}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>

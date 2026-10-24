@@ -101,6 +101,10 @@ export default function ComparisonPage({ currentGoldPrice, onAddToCart, onSelect
                     <img
                       src={item.images[0]}
                       alt={item.name}
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80';
+                      }}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-2 right-2 text-[10px] bg-black/70 text-[#F5D77F] border border-[#D4AF37]/30 px-2 py-0.5 rounded-full backdrop-blur-md">

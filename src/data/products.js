@@ -58,7 +58,7 @@ export const products = [
     tag: 'exclusive',
     tagLabel: 'کالکشن VIP',
     images: [
-      'https://images.unsplash.com/photo-1611591475870-07bf10e4a7a8?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=1000&q=80',
       'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80',
     ],
     sizes: ['سایز ۱ (مچی ۱۴-۱۵)', 'سایز ۲ (مچی ۱۶-۱۷)', 'سایز ۳ (مچی ۱۸-۱۹)'],
@@ -178,8 +178,8 @@ export const products = [
     tag: 'discount_wage',
     tagLabel: 'اجرت فوق‌العاده ۶.۵٪',
     images: [
-      'https://images.unsplash.com/photo-1611591475870-07bf10e4a7a8?auto=format&fit=crop&w=1000&q=80',
-      'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600003014755-ba31aa59c4b6?auto=format&fit=crop&w=1000&q=80',
     ],
     sizes: ['سایز ۱', 'سایز ۲', 'سایز ۳', 'سایز ۴'],
     sizeType: 'bangle',
