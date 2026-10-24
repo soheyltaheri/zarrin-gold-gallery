@@ -93,7 +93,7 @@ export default function ProductDetailModal({
         </div>
 
         {/* Modal Main Grid */}
-        <div className="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-6 max-h-[80vh] overflow-y-auto">
+        <div className="p-3.5 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 max-h-[85vh] sm:max-h-[80vh] overflow-y-auto">
 
           {/* Left Column (in RTL: Right visual column): Images Gallery */}
           <div className="md:col-span-5 space-y-4">

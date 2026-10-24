@@ -72,7 +72,7 @@ export default function OfficialInvoiceModal({
         </div>
 
         {/* Printable Official Invoice Body (Paper Style) */}
-        <div className="p-6 sm:p-8 bg-white text-zinc-900 font-['Vazirmatn'] space-y-6 max-h-[82vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-4">
+        <div className="p-3.5 sm:p-8 bg-white text-zinc-900 font-['Vazirmatn'] space-y-4 sm:space-y-6 max-h-[85vh] sm:max-h-[82vh] overflow-y-auto print:max-h-none print:overflow-visible print:p-4">
 
           {/* Header of the Official Tax Invoice */}
           <div className="border-2 border-amber-900/40 rounded-xl p-4 bg-amber-50/30">

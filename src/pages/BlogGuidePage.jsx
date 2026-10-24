@@ -79,7 +79,7 @@ export default function BlogGuidePage() {
   ];
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+    <div className="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-10">
 
       {/* Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">

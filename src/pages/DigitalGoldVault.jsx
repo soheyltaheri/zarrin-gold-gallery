@@ -75,7 +75,7 @@ export default function DigitalGoldVault({ currentGoldPrice, onOpenOfficialInvoi
   };
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+    <div className="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-10">
 
       {/* Page Header */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -92,7 +92,7 @@ export default function DigitalGoldVault({ currentGoldPrice, onOpenOfficialInvoi
       </div>
 
       {/* Top Portfolio Stats Card */}
-      <div className="bg-gradient-to-r from-[#161822] via-[#201D16] to-[#161822] border-2 border-[#D4AF37]/40 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-r from-[#161822] via-[#201D16] to-[#161822] border-2 border-[#D4AF37]/40 rounded-2xl sm:rounded-3xl p-4 sm:p-8 shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#D4AF37]/10 rounded-full blur-[100px] pointer-events-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">

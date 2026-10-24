@@ -165,7 +165,7 @@ export default function CartDrawer({
 
         {/* Drawer Footer with Legal Summary and CTAs */}
         {cartItems.length > 0 && (
-          <div className="p-4 sm:p-5 border-t border-zinc-800 bg-[#161820] space-y-4">
+          <div className="p-3.5 sm:p-5 border-t border-zinc-800 bg-[#161820] space-y-3 sm:space-y-4 pb-8 sm:pb-5">
 
             {/* Legal Tax Breakdown Accordion */}
             <div className="bg-[#0B0C0E] border border-zinc-800 rounded-xl p-3 space-y-1.5 text-[11px] text-zinc-400">

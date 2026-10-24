@@ -94,39 +94,39 @@ export default function GoldCalculatorModal({ isOpen, onClose, currentGoldPrice 
         </div>
 
         {/* Tabs Bar */}
-        <div className="grid grid-cols-3 border-b border-zinc-800 bg-[#0E1015] text-xs sm:text-sm font-semibold">
+        <div className="grid grid-cols-3 border-b border-zinc-800 bg-[#0E1015] text-[10px] sm:text-sm font-semibold">
           <button
             onClick={() => setActiveTab('buy')}
-            className={`py-3 px-2 flex items-center justify-center gap-2 border-b-2 transition-all ${
+            className={`py-2.5 sm:py-3 px-1 sm:px-2 flex items-center justify-center gap-1 sm:gap-2 border-b-2 transition-all ${
               activeTab === 'buy'
                 ? 'text-[#F5D77F] border-[#D4AF37] bg-[#161820]'
                 : 'text-zinc-400 border-transparent hover:text-zinc-200'
             }`}
           >
-            <Sparkles className="w-4 h-4 text-[#D4AF37]" />
-            <span>محاسبه خرید طلا</span>
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#D4AF37]" />
+            <span>خرید طلا</span>
           </button>
           <button
             onClick={() => setActiveTab('sell_scrap')}
-            className={`py-3 px-2 flex items-center justify-center gap-2 border-b-2 transition-all ${
+            className={`py-2.5 sm:py-3 px-1 sm:px-2 flex items-center justify-center gap-1 sm:gap-2 border-b-2 transition-all ${
               activeTab === 'sell_scrap'
                 ? 'text-emerald-400 border-emerald-400 bg-[#161820]'
                 : 'text-zinc-400 border-transparent hover:text-zinc-200'
             }`}
           >
-            <Coins className="w-4 h-4 text-emerald-400" />
-            <span>فروش طلای دست دوم</span>
+            <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" />
+            <span>فروش دست دوم</span>
           </button>
           <button
             onClick={() => setActiveTab('investment')}
-            className={`py-3 px-2 flex items-center justify-center gap-2 border-b-2 transition-all ${
+            className={`py-2.5 sm:py-3 px-1 sm:px-2 flex items-center justify-center gap-1 sm:gap-2 border-b-2 transition-all ${
               activeTab === 'investment'
                 ? 'text-amber-400 border-amber-400 bg-[#161820]'
                 : 'text-zinc-400 border-transparent hover:text-zinc-200'
             }`}
           >
-            <Scale className="w-4 h-4 text-amber-400" />
-            <span>تبدیل بودجه به آب‌شده</span>
+            <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+            <span>تبدیل بودجه</span>
           </button>
         </div>
 

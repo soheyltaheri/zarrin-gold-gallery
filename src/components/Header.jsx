@@ -42,6 +42,7 @@ export default function Header({
   ratesLastUpdated,
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const navPages = [
     { id: 'store', label: 'ویترین و فروشگاه', icon: Sparkles },
@@ -54,7 +55,7 @@ export default function Header({
 
   return (
     <header className="sticky top-0 z-30 bg-[#0B0C0E]/95 backdrop-blur-md border-b border-[#D4AF37]/20 shadow-xl transition-all">
-      {/* Top micro bar for VIP helpline & trust */}
+      {/* Top micro bar for VIP helpline & trust (desktop only) */}
       <div className="hidden lg:block bg-gradient-to-r from-[#14161C] via-[#1D1B16] to-[#14161C] border-b border-[#D4AF37]/10 py-1.5 px-6 text-xs text-zinc-400">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-6">
@@ -67,7 +68,7 @@ export default function Header({
             <div className="flex items-center gap-2">
               <span className={`w-2 h-2 rounded-full ${isApiLive ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
               <span className="text-xs text-zinc-300">
-                {isApiLive ? 'وب‌سرویس زنده نرخ‌های لحظه‌ای متصل' : 'تابلوی استعلام نرخ اتحادیه'}
+                {isApiLive ? 'سامانه برخط TGJU اتحادیه متصل' : 'تابلوی استعلام نرخ اتحادیه'}
               </span>
               <button
                 onClick={onRefreshRates}
@@ -94,42 +95,44 @@ export default function Header({
       </div>
 
       {/* Main Navigation Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-        {/* Brand identity */}
-        <div className="flex items-center gap-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2 sm:gap-4">
+
+        {/* Brand & Mobile Hamburger */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 text-zinc-300 hover:text-[#D4AF37] rounded-lg hover:bg-zinc-800"
+            className="lg:hidden p-2 text-zinc-300 hover:text-[#D4AF37] rounded-xl hover:bg-zinc-800 transition-colors"
+            aria-label="منوی سایت"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
 
           <button
             onClick={() => onSelectPage('store')}
-            className="flex items-center gap-3 group text-right cursor-pointer"
+            className="flex items-center gap-2 sm:gap-3 group text-right cursor-pointer"
           >
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[#F5D77F] via-[#D4AF37] to-[#8B6508] p-[1.5px] shadow-lg shadow-[#D4AF37]/20 group-hover:shadow-[#D4AF37]/40 transition-all">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#F5D77F] via-[#D4AF37] to-[#8B6508] p-[1.5px] shadow-lg shadow-[#D4AF37]/20 group-hover:shadow-[#D4AF37]/40 transition-all shrink-0">
               <div className="w-full h-full bg-[#0E1015] rounded-[10px] flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-[#D4AF37] group-hover:scale-110 transition-transform" />
+                <Sparkles className="w-4 h-4 sm:w-6 sm:h-6 text-[#D4AF37] group-hover:scale-110 transition-transform" />
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black tracking-tight gold-gradient-text font-serif">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="text-lg sm:text-2xl font-black tracking-tight gold-gradient-text font-serif">
                   زرین‌شاهکار
                 </span>
                 <span className="hidden sm:inline-block text-[10px] bg-[#D4AF37]/15 text-[#F3E5AB] border border-[#D4AF37]/30 px-1.5 py-0.5 rounded font-medium">
-                  عیار ۱۸ (۷۵۰)
+                  عیار ۱۸
                 </span>
               </div>
-              <p className="text-[11px] text-zinc-400 font-light hidden sm:block">
-                گالری تخصصی طلا، جواهر و شمش سرمایه‌گذاری
+              <p className="text-[10px] sm:text-[11px] text-zinc-400 font-light hidden xs:block">
+                طلا، جواهر و شمش
               </p>
             </div>
           </button>
         </div>
 
-        {/* Global Search with instant preview */}
+        {/* Desktop Global Search */}
         <div className="hidden md:flex flex-1 max-w-sm mx-4 relative">
           <div className="relative w-full">
             <input
@@ -155,25 +158,34 @@ export default function Header({
         </div>
 
         {/* Action icons & utilities */}
-        <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Smart Calculator button */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5">
+          {/* Mobile search toggle */}
+          <button
+            onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+            className="md:hidden p-2 bg-[#161820] text-zinc-300 hover:text-white rounded-xl border border-zinc-800"
+            aria-label="جستجو"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Smart Calculator button (hidden on mobile since it's on bottom nav) */}
           <button
             onClick={onOpenCalculator}
-            className="flex items-center gap-2 bg-gradient-to-r from-[#D4AF37]/15 to-[#B8860B]/20 hover:from-[#D4AF37]/25 hover:to-[#B8860B]/30 border border-[#D4AF37]/40 text-[#F5D77F] px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-md hover:scale-[1.02]"
+            className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-[#D4AF37]/15 to-[#B8860B]/20 hover:from-[#D4AF37]/25 hover:to-[#B8860B]/30 border border-[#D4AF37]/40 text-[#F5D77F] px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-md hover:scale-[1.02]"
             title="ماشین حساب محاسبه قیمت طلا با اجرت، سود و مالیات"
           >
             <Calculator className="w-4 h-4 text-[#D4AF37]" />
-            <span className="hidden sm:inline">ماشین‌حساب طلا</span>
+            <span>ماشین‌حساب</span>
           </button>
 
-          {/* Rates Chart Button */}
+          {/* Rates Chart Button (Desktop) */}
           <button
             onClick={onOpenRatesModal}
             className="hidden lg:flex items-center gap-1.5 bg-[#161820] hover:bg-[#1E212B] border border-zinc-800 hover:border-[#D4AF37]/30 text-zinc-300 hover:text-white px-3 py-2 rounded-xl text-xs transition-all"
             title="تحلیل روند و نمودار قیمت طلا"
           >
             <TrendingUp className="w-4 h-4 text-emerald-400" />
-            <span>نمودار نرخ</span>
+            <span>نمودار</span>
           </button>
 
           {/* Custom Bespoke Order Button */}
@@ -189,45 +201,58 @@ export default function Header({
           {/* Wishlist Button */}
           <button
             onClick={onOpenWishlist}
-            className="relative p-2.5 bg-[#161820] hover:bg-[#1E212B] border border-zinc-800 hover:border-[#D4AF37]/30 text-zinc-300 hover:text-rose-400 rounded-xl transition-all"
+            className="relative p-2 sm:p-2.5 bg-[#161820] hover:bg-[#1E212B] border border-zinc-800 hover:border-[#D4AF37]/30 text-zinc-300 hover:text-rose-400 rounded-xl transition-all"
             title="لیست علاقه‌مندی‌ها"
           >
-            <Heart className="w-5 h-5" />
+            <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#0B0C0E] shadow">
+              <span className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] sm:text-[10px] font-bold w-4 h-4 sm:w-5 sm:h-5 rounded-full flex items-center justify-center border-2 border-[#0B0C0E] shadow">
                 {wishlistCount}
               </span>
             )}
           </button>
 
-          {/* Shopping Cart & Official Invoice Drawer Trigger */}
+          {/* Shopping Cart Trigger */}
           <button
             onClick={onOpenCart}
-            className="flex items-center gap-2 bg-[#D4AF37] hover:bg-[#E5C158] text-black px-3.5 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg shadow-[#D4AF37]/20 hover:scale-[1.02]"
+            className="flex items-center gap-1.5 sm:gap-2 bg-[#D4AF37] hover:bg-[#E5C158] text-black px-2.5 sm:px-4 py-2 rounded-xl font-bold text-xs sm:text-sm transition-all shadow-lg shadow-[#D4AF37]/20 active:scale-95"
             title="سبد خرید و صدور پیش‌فاکتور رسمی"
           >
             <div className="relative">
               <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 text-black" />
               {cartCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-[#D4AF37]">
+                <span className="absolute -top-2 -right-2 bg-black text-[#D4AF37] text-[9px] font-black w-4 h-4 rounded-full flex items-center justify-center border border-[#D4AF37]">
                   {cartCount}
                 </span>
               )}
             </div>
-            <div className="flex flex-col text-right">
-              <span className="leading-tight">پیش‌فاکتور</span>
-              {cartTotal > 0 && (
-                <span className="text-[10px] text-zinc-900 font-extrabold hidden sm:inline">
-                  {formatToman(cartTotal)} ت
-                </span>
-              )}
-            </div>
+            <span className="leading-tight text-xs sm:text-sm hidden xs:inline">پیش‌فاکتور</span>
           </button>
         </div>
       </div>
 
-      {/* Pages Multi-tab Navigation Bar */}
-      <div className="bg-[#0E1015] border-t border-zinc-800/80 px-4 sm:px-6 py-2 overflow-x-auto no-scrollbar">
+      {/* Mobile Search input bar (expanded when search icon clicked) */}
+      {mobileSearchOpen && (
+        <div className="md:hidden px-3 pb-2.5 pt-0.5">
+          <div className="relative">
+            <input
+              type="text"
+              autoFocus
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (activePage !== 'store') onSelectPage('store');
+              }}
+              placeholder="جستجو در مصنوعات طلا، کد کالا..."
+              className="w-full bg-[#181B22] border border-[#D4AF37]/50 rounded-xl py-2 pr-9 pl-3 text-xs text-white outline-none"
+            />
+            <Search className="w-4 h-4 text-zinc-400 absolute right-3 top-2.5" />
+          </div>
+        </div>
+      )}
+
+      {/* Desktop Pages Navigation Bar (Hidden on mobile phones, replaced by mobile bottom nav) */}
+      <div className="hidden sm:block bg-[#0E1015] border-t border-zinc-800/80 px-4 sm:px-6 py-2 overflow-x-auto no-scrollbar">
         <div className="max-w-7xl mx-auto flex items-center justify-between text-xs sm:text-sm">
           <nav className="flex items-center gap-4 sm:gap-6">
             {navPages.map((pg) => {
@@ -269,54 +294,44 @@ export default function Header({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0F1116] border-b border-zinc-800 p-4 space-y-4 animate-in slide-in-from-top duration-200">
-          <div className="relative">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                if (activePage !== 'store') onSelectPage('store');
-              }}
-              placeholder="جستجو در نام یا کد طلا..."
-              className="w-full bg-[#181B22] border border-zinc-700 text-sm rounded-xl py-2 pr-9 pl-3 text-white"
-            />
-            <Search className="w-4 h-4 text-zinc-400 absolute right-3 top-2.5" />
-          </div>
-
+        <div className="lg:hidden bg-[#0F1116] border-b border-zinc-800 p-4 space-y-4 animate-in slide-in-from-top duration-200 shadow-2xl">
           <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
-            {navPages.map((pg) => (
-              <button
-                key={pg.id}
-                onClick={() => {
-                  onSelectPage(pg.id);
-                  setMobileMenuOpen(false);
-                }}
-                className={`p-3 rounded-xl text-right border transition-all ${
-                  activePage === pg.id
-                    ? 'bg-[#D4AF37]/20 border-[#D4AF37] text-[#F5D77F]'
-                    : 'bg-zinc-900 border-zinc-800 text-zinc-300'
-                }`}
-              >
-                {pg.label}
-              </button>
-            ))}
+            {navPages.map((pg) => {
+              const Icon = pg.icon;
+              return (
+                <button
+                  key={pg.id}
+                  onClick={() => {
+                    onSelectPage(pg.id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 p-3 rounded-xl text-right border transition-all ${
+                    activePage === pg.id
+                      ? 'bg-[#D4AF37]/20 border-[#D4AF37] text-[#F5D77F] font-bold'
+                      : 'bg-zinc-900 border-zinc-800 text-zinc-300'
+                  }`}
+                >
+                  <Icon className="w-4 h-4 text-[#D4AF37]" />
+                  <span>{pg.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="flex gap-2 pt-2 border-t border-zinc-800">
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-zinc-800">
             <button
-              onClick={() => { onOpenCalculator(); setMobileMenuOpen(false); }}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-[#D4AF37]/20 border border-[#D4AF37]/40 text-[#F5D77F] py-2 rounded-xl text-xs font-bold"
+              onClick={() => { onOpenVerifyInvoice(); setMobileMenuOpen(false); }}
+              className="flex items-center justify-center gap-1.5 bg-zinc-900 border border-zinc-700 text-zinc-200 py-2.5 rounded-xl text-xs font-medium"
             >
-              <Calculator className="w-4 h-4" />
-              ماشین‌حساب طلا
+              <FileCheck2 className="w-4 h-4 text-[#D4AF37]" />
+              <span>استعلام فاکتور</span>
             </button>
             <button
               onClick={() => { onOpenCustomOrder(); setMobileMenuOpen(false); }}
-              className="flex-1 flex items-center justify-center gap-1.5 bg-zinc-800 py-2 rounded-xl text-xs text-white"
+              className="flex items-center justify-center gap-1.5 bg-zinc-900 border border-zinc-700 text-zinc-200 py-2.5 rounded-xl text-xs font-medium"
             >
               <Scale className="w-4 h-4 text-[#D4AF37]" />
-              سفارش ساخت
+              <span>سفارش ساخت</span>
             </button>
           </div>
         </div>

@@ -61,12 +61,12 @@ export default function ProductCard({
   return (
     <div
       onClick={() => onSelectProduct(product)}
-      className="group bg-[#111319] hover:bg-[#161922] border border-zinc-800 hover:border-[#D4AF37]/50 rounded-2xl p-3 sm:p-4 transition-all duration-300 shadow-lg hover:shadow-[#D4AF37]/15 flex flex-col justify-between cursor-pointer relative"
+      className="group bg-[#111319] hover:bg-[#161922] border border-zinc-800 hover:border-[#D4AF37]/50 rounded-xl sm:rounded-2xl p-2 sm:p-4 transition-all duration-300 shadow-lg hover:shadow-[#D4AF37]/15 flex flex-col justify-between cursor-pointer relative"
     >
-      {/* Top Badges & Wishlist Trigger */}
-      <div className="relative mb-3">
+      {/* Top Badges & Photo */}
+      <div className="relative mb-2 sm:mb-3">
         {/* Photo Container */}
-        <div className="relative aspect-square w-full rounded-xl overflow-hidden bg-[#0A0B0E] border border-zinc-800/80">
+        <div className="relative aspect-square w-full rounded-lg sm:rounded-xl overflow-hidden bg-[#0A0B0E] border border-zinc-800/80">
           <img
             src={product.images[activeImageIdx] || product.images[0]}
             alt={product.name}
@@ -79,14 +79,14 @@ export default function ProductCard({
           />
 
           {/* Tag Pill */}
-          <div className="absolute top-2.5 right-2.5 flex flex-col gap-1 z-10">
+          <div className="absolute top-1.5 right-1.5 sm:top-2.5 sm:right-2.5 flex flex-col gap-1 z-10">
             {product.tagLabel && (
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border backdrop-blur-md ${getTagColor(product.tag)}`}>
+              <span className={`text-[8px] sm:text-[10px] font-bold px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full border backdrop-blur-md ${getTagColor(product.tag)}`}>
                 {product.tagLabel}
               </span>
             )}
-            <span className="text-[10px] bg-black/70 text-zinc-300 border border-zinc-700/80 px-2 py-0.5 rounded-full backdrop-blur-md">
-              کد: {product.code}
+            <span className="text-[8px] sm:text-[10px] bg-black/70 text-zinc-300 border border-zinc-700/80 px-1.5 py-0.2 sm:px-2 sm:py-0.5 rounded-full backdrop-blur-md hidden xs:inline-block">
+              {product.code}
             </span>
           </div>
 
@@ -96,85 +96,61 @@ export default function ProductCard({
               e.stopPropagation();
               onToggleWishlist(product.id);
             }}
-            className="absolute top-2.5 left-2.5 p-2 rounded-full bg-black/60 hover:bg-black/80 text-zinc-300 hover:text-rose-400 border border-zinc-700/60 backdrop-blur-md transition-all z-10"
+            className="absolute top-1.5 left-1.5 sm:top-2.5 sm:left-2.5 p-1.5 sm:p-2 rounded-full bg-black/60 hover:bg-black/80 text-zinc-300 hover:text-rose-400 border border-zinc-700/60 backdrop-blur-md transition-all z-10"
             title="افزودن به علاقه‌مندی‌ها"
           >
-            <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
+            <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-rose-500 text-rose-500' : ''}`} />
           </button>
-
-          {/* Multi-image thumbnail bar on hover if multiple images */}
-          {product.images.length > 1 && (
-            <div className="absolute bottom-2 inset-x-0 flex justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-              {product.images.map((_, idx) => (
-                <button
-                  key={idx}
-                  onMouseEnter={(e) => {
-                    e.stopPropagation();
-                    setActiveImageIdx(idx);
-                  }}
-                  className={`w-2 h-2 rounded-full transition-all ${
-                    activeImageIdx === idx ? 'bg-[#D4AF37] w-4' : 'bg-white/50'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Quick Specs Pill Row */}
-        <div className="flex items-center justify-between text-[11px] text-zinc-400 mt-2.5 px-0.5">
-          <div className="flex items-center gap-1 text-zinc-300 bg-zinc-900/90 border border-zinc-800 px-2 py-0.5 rounded-md">
-            <Scale className="w-3 h-3 text-[#D4AF37]" />
-            <span>وزن: <strong className="text-white font-bold">{product.weight}</strong> گرم</span>
+        <div className="flex items-center justify-between text-[9px] sm:text-[11px] text-zinc-400 mt-1.5 sm:mt-2.5 px-0.5">
+          <div className="flex items-center gap-0.5 sm:gap-1 text-zinc-300 bg-zinc-900/90 border border-zinc-800 px-1.5 py-0.5 rounded">
+            <Scale className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-[#D4AF37]" />
+            <span><strong className="text-white font-bold">{product.weight}</strong> گرم</span>
           </div>
 
-          <div className="flex items-center gap-1 text-zinc-300 bg-zinc-900/90 border border-zinc-800 px-2 py-0.5 rounded-md">
+          <div className="flex items-center gap-0.5 sm:gap-1 text-zinc-300 bg-zinc-900/90 border border-zinc-800 px-1.5 py-0.5 rounded">
             <span className="text-zinc-400">اجرت:</span>
             <span className={`font-bold ${product.wagePercent === 0 ? 'text-emerald-400' : 'text-[#F5D77F]'}`}>
-              {product.wagePercent === 0 ? 'صفر٪' : `${product.wagePercent}٪`}
+              {product.wagePercent === 0 ? '۰٪' : `${product.wagePercent}٪`}
             </span>
           </div>
 
-          <span className="text-[10px] text-zinc-500">
+          <span className="text-[9px] text-zinc-500 hidden sm:inline">
             عیار {product.karat}
           </span>
         </div>
       </div>
 
       {/* Product Titles & Info */}
-      <div className="space-y-2 flex-1 flex flex-col justify-between">
+      <div className="space-y-1.5 sm:space-y-2 flex-1 flex flex-col justify-between">
         <div>
-          <h3 className="font-bold text-white text-xs sm:text-sm line-clamp-2 leading-snug group-hover:text-[#F5D77F] transition-colors">
+          <h3 className="font-bold text-white text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 leading-tight group-hover:text-[#F5D77F] transition-colors">
             {product.name}
           </h3>
-          <p className="text-[11px] text-zinc-400 line-clamp-1 mt-1 font-light">
+          <p className="text-[10px] sm:text-[11px] text-zinc-400 line-clamp-1 mt-0.5 font-light hidden sm:block">
             {product.craftsmanship}
           </p>
         </div>
 
         {/* Price & Action Section */}
-        <div className="pt-2.5 border-t border-zinc-800/80 space-y-2.5">
-          <div className="flex justify-between items-baseline">
-            <span className="text-[11px] text-zinc-400">قیمت نهایی لحظه‌ای:</span>
+        <div className="pt-2 border-t border-zinc-800/80 space-y-1.5 sm:space-y-2.5">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-baseline gap-0.5">
+            <span className="text-[9px] sm:text-[11px] text-zinc-400">قیمت نهایی:</span>
             <div className="text-left" dir="ltr">
-              <span className="text-base sm:text-lg font-black gold-gradient-text">
+              <span className="text-xs sm:text-base font-black gold-gradient-text font-mono">
                 {formatToman(priceData.totalPrice)}
               </span>
-              <span className="text-[10px] text-zinc-400 mr-1">تومان</span>
+              <span className="text-[8px] sm:text-[10px] text-zinc-400 mr-1">تومان</span>
             </div>
           </div>
 
-          {/* Quick Legal Breakdown Accordion hint */}
-          <div className="text-[10px] text-zinc-500 bg-zinc-950/60 p-1.5 rounded-lg flex justify-between items-center border border-zinc-900">
-            <span>شامل طلای خام + سود ۷٪ + مالیات قانونی</span>
-            <span className="text-emerald-400 font-medium">فاکتور رسمی</span>
-          </div>
-
           {/* Add to Cart & Inspect buttons */}
-          <div className="flex gap-2 pt-1">
+          <div className="flex gap-1.5 pt-0.5">
             <button
               onClick={handleAddToCart}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold transition-all shadow-md ${
+              className={`flex-1 flex items-center justify-center gap-1 py-1.5 sm:py-2 px-2 sm:px-3 rounded-lg sm:rounded-xl text-[10px] sm:text-xs font-bold transition-all shadow-md ${
                 justAdded
                   ? 'bg-emerald-500 text-black'
                   : 'bg-[#D4AF37] hover:bg-[#E5C158] text-black hover:scale-[1.02]'
@@ -182,13 +158,13 @@ export default function ProductCard({
             >
               {justAdded ? (
                 <>
-                  <Check className="w-4 h-4" />
-                  <span>افزوده شد!</span>
+                  <Check className="w-3.5 h-3.5" />
+                  <span className="hidden xs:inline">ثبت شد</span>
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="w-3.5 h-3.5" />
-                  <span>ثبت در پیش‌فاکتور</span>
+                  <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <span>پیش‌فاکتور</span>
                 </>
               )}
             </button>
@@ -198,10 +174,10 @@ export default function ProductCard({
                 e.stopPropagation();
                 onSelectProduct(product);
               }}
-              className="p-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-colors"
+              className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-zinc-900 hover:bg-zinc-800 text-zinc-300 hover:text-white border border-zinc-800 transition-colors shrink-0"
               title="مشاهده شناسنامه و جدول مشخصات"
             >
-              <Eye className="w-4 h-4" />
+              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>

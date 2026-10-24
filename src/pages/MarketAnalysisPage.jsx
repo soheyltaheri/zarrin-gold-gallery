@@ -90,7 +90,7 @@ export default function MarketAnalysisPage({ rates }) {
   ];
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+    <div className="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-6 sm:space-y-10">
 
       {/* Title */}
       <div className="text-center max-w-3xl mx-auto space-y-3">
@@ -146,7 +146,7 @@ export default function MarketAnalysisPage({ rates }) {
       </div>
 
       {/* Coin Bubble Comprehensive Table */}
-      <div className="bg-[#111319] border border-zinc-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
+      <div className="bg-[#111319] border border-zinc-800 rounded-2xl sm:rounded-3xl p-4 sm:p-8 space-y-4 sm:space-y-6 shadow-xl">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-zinc-800">
           <div>
             <h3 className="text-lg font-bold text-white flex items-center gap-2">

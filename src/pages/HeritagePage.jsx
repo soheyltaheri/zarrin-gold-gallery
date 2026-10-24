@@ -27,7 +27,7 @@ export default function HeritagePage() {
   };
 
   return (
-    <div className="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-16">
+    <div className="py-6 sm:py-10 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-8 sm:space-y-16">
 
       {/* Hero Heritage */}
       <div className="relative rounded-3xl overflow-hidden bg-gradient-to-b from-[#161822] to-[#0E1015] border border-[#D4AF37]/30 p-8 sm:p-14 text-center space-y-6">

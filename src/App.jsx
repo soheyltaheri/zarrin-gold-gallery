@@ -14,6 +14,7 @@ import VerifyInvoiceModal from './components/VerifyInvoiceModal';
 import WishlistModal from './components/WishlistModal';
 import CheckoutSuccessModal from './components/CheckoutSuccessModal';
 import RateEditorModal from './components/RateEditorModal';
+import MobileBottomNav from './components/MobileBottomNav';
 import TrustBadges from './components/TrustBadges';
 import Footer from './components/Footer';
 
@@ -186,7 +187,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0C0E] text-[#E8E6E3] font-['Vazirmatn'] selection:bg-[#D4AF37] selection:text-black">
+    <div className="min-h-screen bg-[#0B0C0E] text-[#E8E6E3] font-['Vazirmatn'] selection:bg-[#D4AF37] selection:text-black pb-20 lg:pb-0">
 
       {/* Top Live Gold & Currency Rate Ticker */}
       <LiveRateTicker
@@ -394,6 +395,19 @@ export default function App() {
         onUpdateGoldPrice={handleUpdateGoldPrice}
         onResetToLive={loadLiveRates}
         tgjuLivePrice={27223000}
+      />
+
+      {/* 12. Floating Mobile Bottom Navigation Bar */}
+      <MobileBottomNav
+        activePage={activePage}
+        onSelectPage={setActivePage}
+        cartCount={cartCount}
+        cartTotal={cartTotal}
+        wishlistCount={wishlist.length}
+        onOpenCart={() => setIsCartOpen(true)}
+        onOpenCalculator={() => setIsCalculatorOpen(true)}
+        onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenRatesModal={() => setIsRatesChartOpen(true)}
       />
 
     </div>
